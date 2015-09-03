@@ -22,5 +22,12 @@ class Currency
   end
 
   def +(money)
+    raise DifferentCurrencyCodeError, "Cannot add different currencies" unless self.currency == money.currency
     self.amount + money.amount if self.currency == money.currency
+  end
+
+  def -(money)
+    raise DifferentCurrencyCodeError, "Cannot subtract different currencies" unless self.currency == money.currency
+    self.amount - money.amount if self.currency == money.currency
+  end
 end
