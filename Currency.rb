@@ -21,4 +21,6 @@ class Currency
     (self.currency == money.currency) && (self.amount == money.amount)
   end
 
+  def +(money)
+    self.amount + money.amount if self.currency == money.currency
 end
