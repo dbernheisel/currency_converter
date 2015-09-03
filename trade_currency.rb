@@ -6,10 +6,12 @@ require_relative './CurrencyTrader'
 
 davidmoney = Currency.new(100, "$")
 blakemoney = Currency.new(100, "$")
+invalidmoney = Currency.new("jfkd200")
 
 puts "======= Tests ========="
 puts "David Money: #{davidmoney}"
 puts "Blake Money: #{blakemoney}"
+puts "Invalid Money: #{invalidmoney}"
 puts "To string: #{davidmoney}"
 puts "Equality Currency: #{davidmoney == blakemoney}"
 puts "Equality string: #{davidmoney == "$100"}"
