@@ -9,60 +9,56 @@ class Currency
   @@CurrencySymbols = %w|Lek ؋ $ ƒ ман p. BZ$ $b KM P лв R$ ៛ ¥ ₡ kn ₱ Kč kr RD$ £ € ¢ Q L Ft Rp ﷼ ₪ J$ ₩ ₭ Ls Lt ден RM ₨ ₮ MT C$ ₦ B/. Gs S/. zł lei руб Дин. S R CHF NT$ ฿ TT$ ₤ ₴ $U Bs ₫ Z$|
   @@CurrencyAbbreviations = %w|ALL AFN ARS AWG AUD AZN BSD BBD BYR BZD BMD BOB BAM BWP BGN BRL BND KHR CAD KYD CLP CNY COP CRC HRK CUP CZK DKK DOP XCD EGP SVC EEK EUR FKP FJD GHC GIP GTQ GGP GYD HNL HKD HUF ISK INR IDR IRR IMP ILS JMD JPY JEP KZT KPW KRW KGS LAK LVL LBP LRD LTL MKD MYR MUR MXN MNT MZN NAD NPR ANG NZD NIO NGN NOK OMR PKR PAB PYG PEN PHP PLN QAR RON RUB SHP SAR RSD SCR SGD SBD SOS ZAR LKR SEK CHF SRD SYP TWD THB TTD TRY TRL TVD UAH GBP USD UYU UZS VEF VND YER ZWD|
 
+  def find_currency_code(money)
+    @@CurrencySymbols.find { |symbol| money.include?(symbol) } || @@CurrencyAbbreviations.find { |abb| money.include?(abb) }
+  end
+
   def initialize(amount, currencycode = nil)
     amount = amount.to_s.strip
-    currencycode = @@CurrencySymbols.find { |symbol| amount.include?(symbol) } || @@CurrencyAbbreviations.find { |abb| amount.include?(abb) } if currencycode == nil
-    amount = amount.gsub(/[^\d\.]/, "").to_f
+    currencycode ? currencycode = currencycode : currencycode = find_currency_code(amount)
+
+    amount = amount.gsub(/[^\d\.]/, "")
+    raise NoAmountCodeError("Cannot determine amount") if amount == ""
+    @amount = amount.to_f
+
+    raise NoCurrencyCodeError("Cannot determine currency code of amount") if !currencycode
     @currency = currencycode
-    @amount = amount
+
   end
 
   def to_s
-    "#{sprintf "%.2f" % @amount} #{@currency}"
+    "#{@currency}#{sprintf "%.2f" % @amount}"
   end
 
   def ==(money)
-    moneyObj = Currency.new(money) rescue false
-    #puts moneyObj, self, money
-    begin
-      return false if moneyObj.class != Currency
-      self.to_s == moneyObj.to_s
-    rescue
-      return false
+    if money.class == Currency
+      moneyObj = money
+    else
+      moneyObj = Currency.new(money) rescue false
     end
+    return false unless moneyObj
+    self.to_s == moneyObj.to_s
   end
 
   def +(money)
-    begin
-      Float(money)
-    rescue
-      raise DifferentCurrencyCodeError, "Cannot add different currencies" unless self.currency == money.currency
-      Currency.new(self.amount + money.amount, self.currency) if self.currency == money.currency
-    else
-      Currency.new(self.amount + money, self.currency)
-    end
+    money.class == Currency ? currencycode = money.currency : currencycode = find_currency_code(money.to_s)
+    currencycode ? moneyObj = Currency.new(money) : moneyObj = Currency.new(money, self.currency)
+    raise DifferentCurrencyCodeError("Cannot add different currencies") unless self.currency == moneyObj.currency
+    Currency.new(self.amount + moneyObj.amount, self.currency) if self.currency == moneyObj.currency
   end
 
   def -(money)
-    begin
-      Float(money)
-    rescue
-      raise DifferentCurrencyCodeError, "Cannot subtract different currencies" unless self.currency == money.currency
-      Currency.new(self.amount - money.amount, self.currency) if self.currency == money.currency
-    else
-      Currency.new(self.amount - money, self.currency)
-    end
+    money.class == Currency ? currencycode = money.currency : currencycode = find_currency_code(money.to_s)
+    currencycode ? moneyObj = Currency.new(money) : moneyObj = Currency.new(money, self.currency)
+    raise DifferentCurrencyCodeError("Cannot subtract different currencies") unless self.currency == moneyObj.currency
+    Currency.new(self.amount - moneyObj.amount, self.currency) if self.currency == moneyObj.currency
   end
 
   def *(money)
-    begin
-      Float(money)
-    rescue
-      raise DifferentCurrencyCodeError, "Cannot multiply different currencies" unless self.currency == money.currency
-      Currency.new(self.amount * money.amount, self.currency) if self.currency == money.currency
-    else
-      Currency.new(self.amount * money, self.currency)
-    end
+    money.class == Currency ? currencycode = money.currency : currencycode = find_currency_code(money.to_s)
+    currencycode ? moneyObj = Currency.new(money) : moneyObj = Currency.new(money, self.currency)
+    raise DifferentCurrencyCodeError("Cannot multiply different currencies") unless self.currency == moneyObj.currency
+    Currency.new(self.amount * moneyObj.amount, self.currency) if self.currency == moneyObj.currency
   end
 
 end

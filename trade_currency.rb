@@ -6,7 +6,7 @@ require_relative './CurrencyTrader'
 
 davidmoney = Currency.new(100, "$")
 blakemoney = Currency.new(100, "$")
-invalidmoney = Currency.new("jfkd200")
+invalidmoney = Currency.new("jfkd200") rescue "Rescued error"
 
 puts "======= Tests ========="
 puts "David Money: #{davidmoney}"
@@ -21,6 +21,7 @@ puts "Inequality string: #{davidmoney == "$900"}"
 puts "Addition Currency: #{davidmoney + blakemoney}"
 puts "Addition integer: #{davidmoney + 10}"
 puts "Addition float: #{davidmoney + 10.52}"
+puts "Addition string: #{davidmoney + "$23.40"}"
 puts "Subtraction: #{davidmoney - blakemoney}"
 puts "Multiplication Currency: #{davidmoney * blakemoney}"
 puts "Multiplication integer: #{davidmoney * 10}"
