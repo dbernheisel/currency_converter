@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+class Currency
+  @currency
+  @amount
+
+  attr_accessor :currency
+  attr_accessor :amount
+
+  def initialize(currency, amount)
+    @currency = currency
+    @amount = amount
+  end
+
+  def to_s
+    "#{currency}#{amount}"
+  end
+
+  def ==(money)
+    return false if money.class != Currency
+    (self.currency == money.currency) && (self.amount == money.amount)
+  end
+
+end
