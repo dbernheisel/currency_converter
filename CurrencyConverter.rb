@@ -59,7 +59,7 @@ class CurrencyConverter
   def convert(from, to)
     self.source_currency = from
     self.target_currency_code = to
-    @rate = @rates[@source_currency.currency][@target_currency_code]
+    @rate = @rates[@source_currency.currency.to_sym][@target_currency_code.to_sym]
     return Currency.new(@source_currency.amount * @rate, @target_currency_code)
   end
 

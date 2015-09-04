@@ -15,16 +15,17 @@ class Currency
   # Source http://www.xe.com/symbols.php
   # TODO: import from a CSV file for complete mapping that's easy to manage.
   @@CurrencyHash = {
-    "USD" => "$",
-    "EUR" => "€",
-    "GBP" => "£",
-    "INR" => " ",
-    "CAD" => "$",
-    "AUD" => "$",
-    "ZAR" => "R",
-    "NZD" => "$",
-    "JPY" => "¥"
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    INR: " ",
+    CAD: "$",
+    AUD: "$",
+    ZAR: "R",
+    NZD: "$",
+    JPY: "¥"
   }
+
 
   def find_currency_code(money)
     # Return nothing if nothing's really there.
@@ -36,7 +37,7 @@ class Currency
     return money.currency if money.class == Currency
 
     # Prefer 3-letter abbreviation since it's exact.
-    return textinmoney if @@CurrencyHash.has_key?(textinmoney)
+    return textinmoney if @@CurrencyHash.has_key?(textinmoney.to_sym)
 
     # Map symbol to 3-letter abbreviation
     # This will return the first key it finds that matches the value.
