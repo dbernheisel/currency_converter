@@ -18,8 +18,8 @@ class CurrencyConverter
   #attr_accessor :source_currency DEFINED MANUALLY
   #attr_accessor :target_currency_code DEFINED MANUALLY
   attr_accessor :rates
-  attr_accessor :rate
-
+  attr_accessor :rate_target
+  attr_accessor :rate_source
 
   def initialize(rate_table)
     if rate_table.is_a?(Hash)
@@ -59,8 +59,10 @@ class CurrencyConverter
   def convert(from, to)
     self.source_currency = from
     self.target_currency_code = to
-    @rate = @rates[@source_currency.currency.to_sym][@target_currency_code.to_sym]
-    return Currency.new(@source_currency.amount * @rate, @target_currency_code)
+    @rate_source = @rates[@source_currency.currency.to_sym]
+    @rate_target = @rates[@target_currency_code.to_sym]
+    rate = (@rate_target / @rate_source)
+    return Currency.new(@source_currency.amount * rate, @target_currency_code)
   end
 
   def to_s
