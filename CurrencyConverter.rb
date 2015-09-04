@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 require './Currency'
 
-class NotCurrency < RuntimeError
+class InvalidCurrency < RuntimeError
+
+end
+
+class InvalidRateTable < RuntimeError
 
 end
 
@@ -9,41 +13,23 @@ class CurrencyConverter
 
   #attr_accessor :source_currency DEFINED MANUALLY
   #attr_accessor :target_currency_code DEFINED MANUALLY
+  attr_accessor :rates
   attr_accessor :rate
 
-  @@rates = { "USD" => {
-                    "USD" => 1.00000,
-                    "EUR" => 0.89932,
-                    "GBP" => 0.65558,
-                    "INR" => 66.0945,
-                    "AUD" => 1.42636,
-                    "CAD" => 1.31838,
-                    "ZAR" => 13.5868,
-                    "NZD" => 1.56566,
-                    "JPY" => 120.085
-                    },
-              "EUR" => {
-                    "USD" => 1.11197,
-                    "EUR" => 1.00000,
-                    "GBP" => 0.72897,
-                    "INR" => 73.4954,
-                    "AUD" => 1.58643,
-                    "CAD" => 1.46597,
-                    "ZAR" => 15.1073,
-                    "NZD" => 1.74092,
-                    "JPY" => 133.538
-                    }
-            }
 
-  def initialize
-    # sit pretty
+  def initialize(rate_table)
+    if rate_table.is_a?(Hash)
+      @rates = rate_table
+    else
+      raise InvalidRateTable, "#{rate_table} is not a valid Hash"
+    end
   end
 
   def source_currency=(setter)
     if setter.is_a?(Currency)
       @source_currency = setter
     else
-      raise NotCurrency, "#{setter} is not a valid Currency object"
+      raise InvalidCurrency, "#{setter} is not a valid Currency object"
     end
   end
 
@@ -55,7 +41,7 @@ class CurrencyConverter
     unless setter.nil? || setter.empty?
       @target_currency_code = @source_currency.find_currency_code(setter)
       if @target_currency_code.nil?
-        raise NotCurrency, "Not a valid Currency object"
+        raise InvalidCurrency, "Not a valid Currency object"
       end
     end
   end
@@ -64,12 +50,11 @@ class CurrencyConverter
     @target_currency_code
   end
 
-  def self.convert(from, to)
-    dude = new
-    dude.source_currency = from
-    dude.target_currency_code = to
-    @rate = @@rates[dude.source_currency.currency][dude.target_currency_code]
-    return Currency.new(dude.source_currency.amount * @rate, dude.target_currency_code)
+  def convert(from, to)
+    self.source_currency = from
+    self.target_currency_code = to
+    @rate = @rates[@source_currency.currency][@target_currency_code]
+    return Currency.new(@source_currency.amount * @rate, @target_currency_code)
   end
 
   def to_s
