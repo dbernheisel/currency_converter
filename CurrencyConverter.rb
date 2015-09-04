@@ -9,6 +9,10 @@ class InvalidRateTable < RuntimeError
 
 end
 
+class NotInitialized < RuntimeError
+
+end
+
 class CurrencyConverter
 
   #attr_accessor :source_currency DEFINED MANUALLY
@@ -38,12 +42,14 @@ class CurrencyConverter
   end
 
   def target_currency_code=(setter)
-    unless setter.nil? || setter.empty?
-      @target_currency_code = @source_currency.find_currency_code(setter)
-      if @target_currency_code.nil?
-        raise InvalidCurrency, "Not a valid Currency object"
-      end
+    unless @source_currency
+      raise NotInitialized, "Cannot set target currency until source currency is provided"
     end
+    currency_code = @source_currency.find_currency_code(setter)
+    unless currency_code
+      raise InvalidCurrency, "Not a valid Currency object"
+    end
+    @target_currency_code = currency_code
   end
 
   def target_currency_code
