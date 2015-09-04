@@ -78,7 +78,7 @@ class Currency
   end
 
   def to_s
-    "#{@@CurrencyHash[@currency]}#{sprintf "%.2f" % @amount} #{@currency}"
+    "#{@@CurrencyHash[@currency.to_sym]}#{sprintf "%.2f" % @amount} #{@currency}"
   end
 
   def ==(money)

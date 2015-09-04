@@ -56,7 +56,7 @@ puts "Subtraction: #{davidmoney - blakemoney}"
 puts "Multiplication Currency: #{davidmoney * blakemoney}"
 puts "Multiplication integer: #{davidmoney * 10}"
 puts "Multiplication float: #{davidmoney * 1.532}"
-puts "Equal and Addition Currency: #{davidmoney}, and after #{davidmoney += blakemoney}"
+puts "Equal and Addition Currency: #{davidmoney}, and after #{davidmoney += blakemoney}, and again #{davidmoney}"
 puts "Equal and Addition Integer: #{davidmoney}, and after #{davidmoney += 10}"
 currency_converter = CurrencyConverter.new(currency_rates)
 davidmoney_eur = currency_converter.convert(davidmoney, "EUR")
