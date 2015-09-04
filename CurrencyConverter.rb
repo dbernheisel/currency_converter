@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require './Currency'
 
 class CurrencyConverter
 
@@ -31,11 +32,12 @@ class CurrencyConverter
 
   def initialize(from, to=nil)
     @source_currency = from
+    to = Currency ? @target_currency = to : @target_currency = Currency.new(to) unless to == nil
+    self.convert(from, to) unless to == nil
   end
 
   def convert(from, to)
-    initialize()
     rate = @@rates[from.currency][to]
-    from.amount * rate
+    Currency.new(from.amount * rate, to)
   end
 end
