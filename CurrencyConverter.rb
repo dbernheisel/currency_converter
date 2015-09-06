@@ -28,10 +28,6 @@ class CurrencyConverter
     @rate_date = rate_table[:date] if rate_table.has_key?(:date)
   end
 
-  def rates(rate_table)
-
-  end
-
   def source_currency=(setter)
     if setter.is_a?(Currency)
       @source_currency = setter
