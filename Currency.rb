@@ -8,6 +8,10 @@ class NoCurrencyCodeError < RuntimeError
 
 end
 
+class DifferentCurrencyCodeError < RuntimeError
+
+end
+
 class Currency
 
   attr_accessor :amount
@@ -91,21 +95,21 @@ class Currency
     currencycode = find_currency_code(money)
     currencycode && money.is_a?(Currency) ? moneyObj = money : moneyObj = Currency.new(money, self.currency)
     raise DifferentCurrencyCodeError, "Cannot add different currencies" unless self.currency == moneyObj.currency
-    Currency.new(self.amount + moneyObj.amount, self.currency) if self.currency == moneyObj.currency
+    Currency.new(self.amount + moneyObj.amount, self.currency)
   end
 
   def -(money)
     currencycode = find_currency_code(money)
     currencycode && money.is_a?(Currency) ? moneyObj = money : moneyObj = Currency.new(money, self.currency)
     raise DifferentCurrencyCodeError, "Cannot subtract different currencies" unless self.currency == moneyObj.currency
-    Currency.new(self.amount - moneyObj.amount, self.currency) if self.currency == moneyObj.currency
+    Currency.new(self.amount - moneyObj.amount, self.currency)
   end
 
   def *(money)
     currencycode = find_currency_code(money)
     currencycode && money.is_a?(Currency) ? moneyObj = money : moneyObj = Currency.new(money, self.currency)
     raise DifferentCurrencyCodeError, "Cannot multiply different currencies" unless self.currency == moneyObj.currency
-    Currency.new(self.amount * moneyObj.amount, self.currency) if self.currency == moneyObj.currency
+    Currency.new(self.amount * moneyObj.amount, self.currency)
   end
 
 end
