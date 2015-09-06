@@ -17,16 +17,19 @@ class CurrencyConverter
 
   #attr_accessor :source_currency DEFINED MANUALLY
   #attr_accessor :target_currency_code DEFINED MANUALLY
-  attr_accessor :rates
+  attr_accessor :rates, :rate
   attr_accessor :rate_target
   attr_accessor :rate_source
+  attr_accessor :rate_date
 
   def initialize(rate_table)
-    if rate_table.is_a?(Hash)
-      @rates = rate_table
-    else
-      raise InvalidRateTable, "#{rate_table} is not a valid Hash"
-    end
+    raise InvalidRateTable, "#{rate_table} is not a valid Hash" unless rate_table.is_a?(Hash)
+    @rates = rate_table[:rates] if rate_table.has_key?(:rates)
+    @rate_date = rate_table[:date] if rate_table.has_key?(:date)
+  end
+
+  def rates(rate_table)
+
   end
 
   def source_currency=(setter)
@@ -61,8 +64,8 @@ class CurrencyConverter
     self.target_currency_code = to
     @rate_source = @rates[@source_currency.currency.to_sym]
     @rate_target = @rates[@target_currency_code.to_sym]
-    rate = (@rate_target / @rate_source)
-    return Currency.new(@source_currency.amount * rate, @target_currency_code)
+    @rate = (@rate_target / @rate_source)
+    return Currency.new(@source_currency.amount * @rate, @target_currency_code)
   end
 
   def to_s
