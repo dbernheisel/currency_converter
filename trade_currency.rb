@@ -48,6 +48,20 @@ currency_rates_20150907 = { rates: {
                             date: DateTime.new(2015,9,7)
                           }
 
+currency_rates_20150911 = { rates: {
+                                    USD: 1.00000,
+                                    EUR: 0.10000,
+                                    GBP: 0.20000,
+                                    INR: 99.9050,
+                                    AUD: 1.50000,
+                                    CAD: 1.10000,
+                                    ZAR: 15.0000,
+                                    NZD: 1.60000,
+                                    JPY: 120.000
+                                  },
+                            date: DateTime.new(2015,9,11)
+                          }
+
 
 davidmoney = Currency.new(100, "$")
 blakemoney = Currency.new(100, "USD")
@@ -94,6 +108,7 @@ puts "======= Currency Conversion ========="
 currency_converter_old = CurrencyConverter.new(currency_rates_20150903)
 currency_converter_new = CurrencyConverter.new(currency_rates_20150904)
 currency_converter_newer = CurrencyConverter.new(currency_rates_20150907)
+currency_converter_newest = CurrencyConverter.new(currency_rates_20150911)
 davidmoney_eur = currency_converter_old.convert(davidmoney, "EUR")
 puts "Convert USD to EUR: #{davidmoney}, and after: #{davidmoney_eur}"
 conversioneq = currency_converter_old.convert(Currency.new(1, "USD"), "USD") == Currency.new(1, "USD")
@@ -106,8 +121,13 @@ puts "Conversion Error (not recognized currency): #{conversionerror}"
 puts ""
 puts "======= Currency Trader ========="
 puts "Currency Trader Analytics"
-trader = CurrencyTrader.new([currency_converter_old, currency_converter_new, currency_converter_newer], :USD)
+trader = CurrencyTrader.new([currency_converter_old, currency_converter_new, currency_converter_newer, currency_converter_newest], :USD)
 puts "Best performing currency from 9/3 to 9/4: #{trader.best_currency(currency_converter_old, currency_converter_new)}"
 best_trades = trader.best_currency_path
-puts "best_trades.inspect"
+puts "Optimal currency path: #{best_trades.to_s}"
+advice = trader.give_advice
+advice.each do |trade, info|
+  profit_currency = Currency.new(info[3], trader.source_currency)
+  puts "On #{info[0].strftime("%m/%d/%y")} trade to #{info[2]} and trade back on #{info[1].strftime("%m/%d/%y")} and you'll make #{profit_currency}"
+end
 
