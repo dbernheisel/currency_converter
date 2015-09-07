@@ -33,8 +33,8 @@ converter.convert(Currency.new("$100"), :EUR) => €89
 
 - CurrencyTrader methods avaiable:
 ```
-.best_currency(earlier_conversion, later_conversion)
-.profit_in_trade(earlier_conversion, later_conversion)
+.best_currency(earlier_conversion, later_conversion) => :USD
+.profit_in_trade(earlier_conversion, later_conversion) => 1.8
 .best_currency_path => [:USD, :GBP, :JPY, etc]
 .best_currency_amount => $100000
 .give_advice => {1: [olddate, newdate, currency, profit], 2: [olddate, newdate, currency, profit], etc}

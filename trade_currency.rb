@@ -129,6 +129,6 @@ puts "Optimal currency path: #{best_trades.to_s}"
 advice = trader.give_advice
 advice.each do |trade, info|
   profit_currency = Currency.new(info[3], trader.source_currency)
-  puts "On #{info[0].strftime("%m/%d/%y")} trade to #{info[2]} and trade back on #{info[1].strftime("%m/%d/%y")} and you'll make #{profit_currency}"
+  puts "On #{info[0].strftime("%m/%d/%y")} trade to #{info[2]} and trade back on #{info[1].strftime("%m/%d/%y")} and you'll make #{profit_currency} from 1"
 end
 
