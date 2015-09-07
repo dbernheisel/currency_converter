@@ -89,6 +89,7 @@ puts "Blake Amount Set String: #{blakemoney}"
 blakemoney.amount = davidmoney.amount
 puts "Blake Amount Set David's Money Amount: #{blakemoney}"
 blakemoney.amount = "$23.54"
+puts "#{(Currency.new("$100") + Currency.new("$100")).to_s}"
 puts "Blake Amount Set Float: #{blakemoney}"
 puts "Inequality Currency: #{davidmoney == blakemoney}"
 puts "Inequality string: #{davidmoney == "$900"}"

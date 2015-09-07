@@ -62,6 +62,7 @@ class CurrencyTrader
       profits += self.profit_in_trade(@currency_conversions[i], @currency_conversions[i+1])
       i += 1
     end
+    Currency.new(profits, @source_currency)
   end
 
   def give_advice
