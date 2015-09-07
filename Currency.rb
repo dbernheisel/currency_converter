@@ -111,7 +111,6 @@ class Currency
     raise DifferentCurrencyCodeError, "Cannot multiply different currencies" unless self.currency == moneyObj.currency
     Currency.new(self.amount * moneyObj.amount, self.currency)
   end
-
 end
 
 

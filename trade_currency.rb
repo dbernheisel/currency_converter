@@ -34,6 +34,20 @@ currency_rates_20150904 = { rates: {
                             date: DateTime.new(2015,9,4)
                           }
 
+currency_rates_20150907 = { rates: {
+                                    USD: 1.00000,
+                                    EUR: 0.89530,
+                                    GBP: 0.65420,
+                                    INR: 66.9050,
+                                    AUD: 1.44346,
+                                    CAD: 1.33069,
+                                    ZAR: 13.9567,
+                                    NZD: 1.59920,
+                                    JPY: 119.354
+                                  },
+                            date: DateTime.new(2015,9,7)
+                          }
+
 
 davidmoney = Currency.new(100, "$")
 blakemoney = Currency.new(100, "USD")
@@ -56,7 +70,7 @@ puts "Equality Currency: #{davidmoney == blakemoney}"
 puts "Equality string: #{davidmoney == "$100"}"
 blakemoney.amount = 20
 puts "Blake Amount Set Integer: #{blakemoney}"
-blakemoney.amount = "$20"
+blakemoney.amount = "$30"
 puts "Blake Amount Set String: #{blakemoney}"
 blakemoney.amount = davidmoney.amount
 puts "Blake Amount Set David's Money Amount: #{blakemoney}"
@@ -74,8 +88,12 @@ puts "Multiplication integer: #{davidmoney * 10}"
 puts "Multiplication float: #{davidmoney * 1.532}"
 puts "Equal and Addition Currency: #{davidmoney}, and after #{davidmoney += blakemoney}, and again #{davidmoney}"
 puts "Equal and Addition Integer: #{davidmoney}, and after #{davidmoney += 10}"
+
+puts ""
+puts "======= Currency Conversion ========="
 currency_converter_old = CurrencyConverter.new(currency_rates_20150903)
 currency_converter_new = CurrencyConverter.new(currency_rates_20150904)
+currency_converter_newer = CurrencyConverter.new(currency_rates_20150907)
 davidmoney_eur = currency_converter_old.convert(davidmoney, "EUR")
 puts "Convert USD to EUR: #{davidmoney}, and after: #{davidmoney_eur}"
 conversioneq = currency_converter_old.convert(Currency.new(1, "USD"), "USD") == Currency.new(1, "USD")
@@ -86,8 +104,10 @@ conversionerror = currency_converter_old.convert(Currency.new(1, "USD"), "someth
 puts "Conversion Error (not recognized currency): #{conversionerror}"
 
 puts ""
-puts ""
+puts "======= Currency Trader ========="
 puts "Currency Trader Analytics"
-trader = CurrencyTrader.new([currency_converter_old, currency_converter_new], "USD")
-
+trader = CurrencyTrader.new([currency_converter_old, currency_converter_new, currency_converter_newer], :USD)
+puts "Best performing currency from 9/3 to 9/4: #{trader.best_currency(currency_converter_old, currency_converter_new)}"
+best_trades = trader.best_currency_path
+puts "best_trades.inspect"
 
