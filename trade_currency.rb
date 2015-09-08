@@ -126,8 +126,7 @@ trader = CurrencyTrader.new([currency_converter_old, currency_converter_new, cur
 puts "Best performing currency from 9/3 to 9/4: #{trader.best_currency(currency_converter_old, currency_converter_new)}"
 best_trades = trader.best_currency_path
 puts "Optimal currency path: #{best_trades.to_s}"
-advice = trader.give_advice
-advice.each do |trade, info|
+trader.give_advice.each do |trade, info|
   profit_currency = Currency.new(info[3], trader.source_currency)
   puts "On #{info[0].strftime("%m/%d/%y")} trade to #{info[2]} and trade back on #{info[1].strftime("%m/%d/%y")} and you'll make #{profit_currency} from 1"
 end

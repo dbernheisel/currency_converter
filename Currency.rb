@@ -59,9 +59,7 @@ class Currency
   # Validate the currency and clean it up.
   def currency=(setter)
     currencycode = find_currency_code(setter)
-    if currencycode.nil? || currencycode.empty?
-      raise NoCurrencyCodeError, "Cannot determine currency code of #{setter}"
-    end
+    raise NoCurrencyCodeError, "Cannot determine currency code of #{setter}" if currencycode.nil? || currencycode.empty?
     @currency = currencycode
   end
 

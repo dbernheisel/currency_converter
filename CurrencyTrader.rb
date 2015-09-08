@@ -18,6 +18,10 @@ class CurrencyTrader
     @best_path_currencies = []
   end
 
+  # The best currency will be the one that results in the highest
+  # conversion back into the base currency after 2 points in time.
+  # Eg: If the EUR currency improves one day, and then decreases the next day
+  # Then buy EUR and then trade back to the base currency.
   def best_currency(earlier_conversion, later_conversion)
     best_conversion_amount = 0.0
     best_conversion_currency = nil
@@ -35,6 +39,9 @@ class CurrencyTrader
     best_conversion_currency
   end
 
+  # Determine the profit from currency trade. Eg: The base currency of USD,
+  # when traded to EUR one day and increases in value for the next day, when
+  # traded back to USD on the next day would yield a $0.02 profit.
   def profit_in_trade(earlier_conversion, later_conversion)
     best_currency = self.best_currency(earlier_conversion, later_conversion)
     early_amount_currency = earlier_conversion.convert(earlier_conversion.source_currency, best_currency)
@@ -42,6 +49,9 @@ class CurrencyTrader
     return later_amount_currency.amount - early_amount_currency.amount
   end
 
+  # Given the instance's @currency_conversion array, loop through them and
+  # and determine the best_currency for each. Return an array of currency
+  # codes.
   def best_currency_path
     i = 0
     loop do
@@ -53,6 +63,8 @@ class CurrencyTrader
     @best_path_currencies
   end
 
+  # Same as best_currency_path, except keep track of the profits and return
+  # the potential sum if the best_currency_path was utilized.
   def best_currency_amount
     self.best_currency_path if @best_currency_path == []
     return nil if @best_currency_path == []
@@ -65,9 +77,11 @@ class CurrencyTrader
     Currency.new(profits, @source_currency)
   end
 
+  # Helper method to provide context for each conversion and best decision
+  # during a trade.
+  # returns {1: [olddate, newdate, currency, profit]
+  #          2: [olddate, newdate, currency, profit]}
   def give_advice
-    # returns {1: [olddate, newdate, currency, profit]
-    #          2: [olddate, newdate, currency, profit]}
     advice = {}
     i = 1
     loop do
