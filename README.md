@@ -12,7 +12,7 @@
 - Create a new Currency object: `Currency.new("$100")` or `Currency.new(100, :USD)`
 - Handle Currency instances easily for simple math, eg `(Currency.new("$100") + Currency.new("$100")).to_s => $200 USD`
 - Convert currencies. Create a new CurrencyConverter instance and pass it the exchange rate hash:
-```
+```ruby
 currency_rates_20150903 = { rates: {
                                     USD: 1.00000,
                                     EUR: 0.89932,
@@ -29,14 +29,14 @@ currency_rates_20150903 = { rates: {
 converter = CurrencyConverter.new(currency_rates_20150903)
 converter.convert(Currency.new("$100"), :EUR) => €89
 ```
-- Analyze different exchange rates, and source currency code. Create a CurrencyTrader instance `CurrencyTrader.new([currency_rates1, currency_rates2, currency_rates3], :USD)`
+- Analyze different exchange rates, and source currency code. Create a CurrencyTrader instance with an array of conversion rates, and the base currency. `CurrencyTrader.new([currency_rates1, currency_rates2, currency_rates3], :USD)`
 
 - CurrencyTrader methods avaiable:
-```
+```ruby
 .best_currency(earlier_conversion, later_conversion) => :USD
 .profit_in_trade(earlier_conversion, later_conversion) => 1.8
 .best_currency_path => [:USD, :GBP, :JPY, etc]
-.best_currency_amount => $100000
+.best_currency_amount => 100000.0
 .give_advice => {1: [olddate, newdate, currency, profit], 2: [olddate, newdate, currency, profit], etc}
 ```
 Sample output of give_advice after some formatting:
